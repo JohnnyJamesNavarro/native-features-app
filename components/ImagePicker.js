@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, Image, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import Colors from "../constants/Colors";
 
 const ImgPicker = (props) => {
+  const [pickedImage, setPickedImage] = useState();
+
   const verifyPermissions = async () => {
     // The device remembers if permissions have been previously granted or not to the app.
     // In that case it just goes directly to the return statements.
@@ -29,18 +31,27 @@ const ImgPicker = (props) => {
 
     if (!hasPermission) return;
 
-    ImagePicker.launchCameraAsync();
+    const image = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 0.5, // Between 0 and 1.
+    });
+
+    setPickedImage(image.uri);
   };
 
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        <Text>No image picked yet.</Text>
-        <Image style={styles.image} />
+        {!pickedImage ? (
+          <Text>No image picked yet.</Text>
+        ) : (
+          <Image style={styles.image} source={{ uri: pickedImage }} />
+        )}
       </View>
       <Button
         title="Take Image"
-        color={Colors.primary}
+        color={Colors.secondary}
         onPress={takeImageHandler}
       />
     </View>
@@ -60,7 +71,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     alignItems: "center",
-    borderColor: Colors.primary,
+    borderColor: Colors.secondary,
     borderWidth: 2,
   },
   image: {
