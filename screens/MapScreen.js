@@ -9,6 +9,10 @@ const MapScreen = () => {
   );
 };
 
+MapScreen.navigationOptions = {
+  headerTitle: "Map",
+};
+
 export default MapScreen;
 
 const styles = StyleSheet.create({});

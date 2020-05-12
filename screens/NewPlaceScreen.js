@@ -9,6 +9,10 @@ const NewPlaceScreen = () => {
   );
 };
 
+NewPlaceScreen.navigationOptions = {
+  headerTitle: "New Place",
+};
+
 export default NewPlaceScreen;
 
 const styles = StyleSheet.create({});

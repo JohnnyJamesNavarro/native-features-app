@@ -9,6 +9,10 @@ const PlaceDetailsScreen = () => {
   );
 };
 
+PlaceDetailsScreen.navigationOptions = {
+  headerTitle: "Place Details",
+};
+
 export default PlaceDetailsScreen;
 
 const styles = StyleSheet.create({});
