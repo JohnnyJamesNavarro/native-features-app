@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet, Text, Platform } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Colors from "../constants/Colors";
 
-const MapScreen = () => {
+const MapScreen = (props) => {
   const [selectedLocation, setSelectedLocation] = useState();
 
   const mapRegion = {
@@ -18,6 +20,15 @@ const MapScreen = () => {
       longitude: event.nativeEvent.coordinate.longitude,
     });
   };
+
+  const savePickedLocationHandler = useCallback(() => {
+    if (!selectedLocation) return;
+    props.navigation.navigate("NewPlace", { pickedLocation: selectedLocation });
+  }, [selectedLocation]);
+
+  useEffect(() => {
+    props.navigation.setParams({ saveLocation: savePickedLocationHandler });
+  }, [savePickedLocationHandler]);
 
   let markerCoordinates;
 
@@ -40,8 +51,17 @@ const MapScreen = () => {
   );
 };
 
-MapScreen.navigationOptions = {
-  headerTitle: "Map",
+MapScreen.navigationOptions = (navData) => {
+  const saveFunction = navData.navigation.getParam("saveLocation");
+
+  return {
+    headerTitle: "Interactive Map",
+    headerRight: (
+      <TouchableOpacity style={styles.headerButton} onPress={saveFunction}>
+        <Text style={styles.headerButtonText}>Save</Text>
+      </TouchableOpacity>
+    ),
+  };
 };
 
 export default MapScreen;
@@ -49,5 +69,13 @@ export default MapScreen;
 const styles = StyleSheet.create({
   map: {
     flex: 1,
+  },
+  headerButton: {
+    marginHorizontal: 20,
+  },
+  headerButtonText: {
+    fontSize: 16,
+    color: Platform.OS === "android" ? "white" : Colors.primary,
+    textTransform: "capitalize",
   },
 });
