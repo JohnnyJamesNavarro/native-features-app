@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,12 @@ import MapPreview from "./MapPreview";
 const LocationPicker = ({ navigation }) => {
   const [isFetching, setIsFetching] = useState(false);
   const [pickedLocation, setPickedLocation] = useState();
+
+  const pickedLocationFromMap = navigation.getParam("pickedLocation");
+
+  useEffect(() => {
+    if (pickedLocationFromMap) setPickedLocation(pickedLocationFromMap);
+  }, [pickedLocationFromMap]);
 
   const verifyPermissions = async () => {
     // The device remembers if permissions have been previously granted or not to the app.
