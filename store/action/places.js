@@ -8,7 +8,7 @@ export const SET_PLACES = "SET_PLACES";
 export const addPlace = (title, image, location) => {
   return async (dispatch) => {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=${ENV}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.latitude},${location.longitude}&key=${ENV.googleApiKey}`
     );
 
     if (!response.ok) {
