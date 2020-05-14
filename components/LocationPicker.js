@@ -13,15 +13,18 @@ import * as Permissions from "expo-permissions";
 import Colors from "../constants/Colors";
 import MapPreview from "./MapPreview";
 
-const LocationPicker = ({ navigation }) => {
+const LocationPicker = ({ navigation, onLocationPicked }) => {
   const [isFetching, setIsFetching] = useState(false);
   const [pickedLocation, setPickedLocation] = useState();
 
   const pickedLocationFromMap = navigation.getParam("pickedLocation");
 
   useEffect(() => {
-    if (pickedLocationFromMap) setPickedLocation(pickedLocationFromMap);
-  }, [pickedLocationFromMap]);
+    if (pickedLocationFromMap) {
+      setPickedLocation(pickedLocationFromMap);
+      onLocationPicked(pickedLocationFromMap);
+    }
+  }, [pickedLocationFromMap, onLocationPicked]);
 
   const verifyPermissions = async () => {
     // The device remembers if permissions have been previously granted or not to the app.
@@ -54,6 +57,11 @@ const LocationPicker = ({ navigation }) => {
       });
 
       setPickedLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+
+      onLocationPicked({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
